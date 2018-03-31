@@ -1,0 +1,128 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{3C62F7F6-F00D-4123-B84E-68C992B2C4ED}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ZCXJ_CS.UI</RootNamespace>
+    <AssemblyName>FormTurnoverCard</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\ZCXJ_CS.Presentation\bin\Plugins\UI\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\ZCXJ_CS.Presentation\bin\Plugins\UI\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="BillPrintEngine, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Dlls\BillPrintEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="zxing">
+      <HintPath>..\..\Dlls\zxing.dll</HintPath>
+    </Reference>
+    <Reference Include="zxing.presentation">
+      <HintPath>..\..\Dlls\zxing.presentation.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DlgPreview.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DlgPreview.Designer.cs">
+      <DependentUpon>DlgPreview.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormTurnoverCard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormTurnoverCard.Designer.cs">
+      <DependentUpon>FormTurnoverCard.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormTurnoverCardPlugin.cs" />
+    <Compile Include="GetToolBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GetToolBox.Designer.cs">
+      <DependentUpon>GetToolBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\ZCXJ_CS.Applications\ZCXJ_CS.Applications.csproj">
+      <Project>{CCC4051E-9B2C-4DD1-92BF-D4FDB959F077}</Project>
+      <Name>ZCXJ_CS.Applications</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ZCXJ_CS.Domain\ZCXJ_CS.Domain.csproj">
+      <Project>{71DE289D-6221-4E0F-A2D4-A7B2E1CB65B2}</Project>
+      <Name>ZCXJ_CS.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ZCXJ_CS.Infrastructure\ZCXJ_CS.Infrastructure.csproj">
+      <Project>{8494DB1E-87C4-43A5-9693-7BBADA21000C}</Project>
+      <Name>ZCXJ_CS.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ZCXJ_CS.Utilities\LogHelper\LogHelper.csproj">
+      <Project>{43dcf446-4179-46c4-9c5c-bfb5d87e4897}</Project>
+      <Name>LogHelper</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ZCXJ_CS.Utilities\SerialPortHelper\SerialPortHelper.csproj">
+      <Project>{7D41C245-C7A1-4074-B689-29846AE8989B}</Project>
+      <Name>SerialPortHelper</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FormWorkTicket\FormWorkTicket.csproj">
+      <Project>{39F56BFA-92DC-42EA-AA86-AE48344561B3}</Project>
+      <Name>FormWorkTicket</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\UIBase\UIBase.csproj">
+      <Project>{695A088F-0592-4C1C-901D-69D8C6E6F6D9}</Project>
+      <Name>UIBase</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DlgPreview.resx">
+      <DependentUpon>DlgPreview.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormTurnoverCard.resx">
+      <DependentUpon>FormTurnoverCard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GetToolBox.resx">
+      <DependentUpon>GetToolBox.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

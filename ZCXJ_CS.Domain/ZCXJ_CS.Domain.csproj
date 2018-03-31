@@ -1,0 +1,108 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{71DE289D-6221-4E0F-A2D4-A7B2E1CB65B2}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ZCXJ_CS.Domain</RootNamespace>
+    <AssemblyName>ZCXJ_CS.Domain</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\ZCXJ_CS.Presentation\bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\ZCXJ_CS.Presentation\bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Dlls\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Models\BomCache.cs" />
+    <Compile Include="Models\BomTech.cs" />
+    <Compile Include="Models\CallEvent.cs" />
+    <Compile Include="Models\QualityRecord.cs" />
+    <Compile Include="Models\QualityRecordItem.cs" />
+    <Compile Include="Models\QualityStandard.cs" />
+    <Compile Include="ViewModels\ProductBom.cs" />
+    <Compile Include="ViewModels\ScadaData.cs" />
+    <Compile Include="Models\TeamHandover.cs" />
+    <Compile Include="ViewModels\TeamHandoverView.cs" />
+    <Compile Include="ViewModels\TechIndicatorss.cs" />
+    <Compile Include="ViewModels\TechLocalParams.cs" />
+    <Compile Include="ViewModels\TechMaterialAssemblys.cs" />
+    <Compile Include="ViewModels\TechMaterials.cs" />
+    <Compile Include="ViewModels\TechProduceToolss.cs" />
+    <Compile Include="ViewModels\TechQualityControls.cs" />
+    <Compile Include="ViewModels\TechStandardFiles.cs" />
+    <Compile Include="Models\TurnOverCard.cs" />
+    <Compile Include="Models\User.cs" />
+    <Compile Include="Models\WorkTicket.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ZCXJ_CS.Utilities\ConfigHelper\ConfigHelper.csproj">
+      <Project>{E202C521-22E9-477E-B376-277935A43978}</Project>
+      <Name>ConfigHelper</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ZCXJ_CS.Utilities\JsonHelper\JsonHelper.csproj">
+      <Project>{DF903017-CA0F-430A-A9AA-4DDC4C355449}</Project>
+      <Name>JsonHelper</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ZCXJ_CS.Utilities\LogHelper\LogHelper.csproj">
+      <Project>{43DCF446-4179-46C4-9C5C-BFB5D87E4897}</Project>
+      <Name>LogHelper</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ZCXJ_CS.Utilities\SerialPortHelper\SerialPortHelper.csproj">
+      <Project>{7D41C245-C7A1-4074-B689-29846AE8989B}</Project>
+      <Name>SerialPortHelper</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ZCXJ_CS.Utilities\SqliteHelper\SqliteHelper.csproj">
+      <Project>{89362B3E-116E-4E71-A098-657101D78E4A}</Project>
+      <Name>SqliteHelper</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ZCXJ_CS.Infrastructure\ZCXJ_CS.Infrastructure.csproj">
+      <Project>{8494DB1E-87C4-43A5-9693-7BBADA21000C}</Project>
+      <Name>ZCXJ_CS.Infrastructure</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

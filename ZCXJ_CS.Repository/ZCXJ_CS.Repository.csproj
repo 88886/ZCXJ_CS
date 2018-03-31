@@ -1,0 +1,89 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{EC4EB6FE-8F2E-406A-B3C2-169F9CBD7F2F}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ZCXJ_CS.Repository</RootNamespace>
+    <AssemblyName>ZCXJ_CS.Repository</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\ZCXJ_CS.Presentation\bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\ZCXJ_CS.Presentation\bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Dlls\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="SQLite.CodeFirst, Version=1.2.3.15, Culture=neutral, PublicKeyToken=eb96ba0a78d831a7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Dlls\SQLite.CodeFirst.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="EntityMap\QualityRecordMap.cs" />
+    <Compile Include="EntityMap\QualityRecordItemMap.cs" />
+    <Compile Include="EntityMap\QualityStandardMap.cs" />
+    <Compile Include="EntityMap\BomCacheMap.cs" />
+    <Compile Include="EntityMap\BomTechMap.cs" />
+    <Compile Include="DBContext\SQLiteContext.cs" />
+    <Compile Include="EntityMap\MES_CallEventMap.cs" />
+    <Compile Include="MES_CallEventRepository.cs" />
+    <Compile Include="EntityMap\TeamHandoverMap.cs" />
+    <Compile Include="EntityMap\TurnOverCardMap.cs" />
+    <Compile Include="EntityMap\UserMap.cs" />
+    <Compile Include="EntityMap\WorkTicketMap.cs" />
+    <Compile Include="TeamHandoverRepository.cs" />
+    <Compile Include="TurnOverCardRepository.cs" />
+    <Compile Include="UserRepository.cs" />
+    <Compile Include="WorkTicketRepository.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ZCXJ_CS.Domain\ZCXJ_CS.Domain.csproj">
+      <Project>{71DE289D-6221-4E0F-A2D4-A7B2E1CB65B2}</Project>
+      <Name>ZCXJ_CS.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ZCXJ_CS.Infrastructure\ZCXJ_CS.Infrastructure.csproj">
+      <Project>{8494DB1E-87C4-43A5-9693-7BBADA21000C}</Project>
+      <Name>ZCXJ_CS.Infrastructure</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,505 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>YylGraph</name>
+    </assembly>
+    <members>
+        <member name="T:Yangyalin.YGraph">
+            <summary>
+            波形显示控件
+            坐标最小差值：1.0
+            </summary>
+        </member>
+        <member name="F:Yangyalin.YGraph.components">
+            <summary> 
+            必需的设计器变量。
+            </summary>
+        </member>
+        <member name="M:Yangyalin.YGraph.Dispose(System.Boolean)">
+            <summary> 
+            清理所有正在使用的资源。
+            </summary>
+            <param name="disposing">如果应释放托管资源，为 true；否则为 false。</param>
+        </member>
+        <member name="M:Yangyalin.YGraph.InitializeComponent">
+            <summary> 
+            设计器支持所需的方法 - 不要
+            使用代码编辑器修改此方法的内容。
+            </summary>
+        </member>
+        <member name="M:Yangyalin.YGraph._getQuan(System.Single)">
+            <summary>
+            计算一个浮点数的权值
+            如234.53返回100
+            </summary>
+            <param name="m">要计算权值的浮点数</param>
+            <returns>权值</returns>
+        </member>
+        <member name="M:Yangyalin.YGraph._changXBegionOrEndGO(System.Single,System.Boolean)">
+            <summary>
+            根据溢出坐标范围的浮点数，改变X轴的坐标标定权值和坐标标定值
+            </summary>
+            <param name="m">溢出坐标范围的浮点数</param>
+            <param name="isL">是否从左边溢出</param>
+        </member>
+        <member name="M:Yangyalin.YGraph._changYBegionOrEndGO(System.Single,System.Boolean)">
+            <summary>
+            根据溢出坐标范围的浮点数，改变Y轴的坐标标定权值和坐标标定值
+            </summary>
+            <param name="m">溢出坐标范围的浮点数</param>
+            <param name="isL">是否从下边溢出</param>
+        </member>
+        <member name="M:Yangyalin.YGraph._changeToDrawPoints(System.Collections.Generic.List{System.Drawing.PointF},System.Collections.Generic.List{System.Drawing.PointF}@,System.Int32,System.Int32)">
+            <summary>
+            遍历要画的数据集合，并转换为坐标值
+            </summary>
+            <param name="CurrentlistPoint">要遍历的数据集合的编号</param>
+            <param name="listDrawPoints">转后后的坐标集合</param>
+            <param name="width">画布像素宽度</param>
+            <param name="height">画布像素高度</param>
+            <returns></returns>
+        </member>
+        <member name="M:Yangyalin.YGraph._changeXYPointsToNum(System.Single,System.Single,System.Single,System.Single,System.Single@,System.Single@,System.Single@,System.Single@)">
+            <summary>
+            波形显示中矩形区域的坐标转换为数据值
+            </summary>
+            <param name="xB">矩形区域左上角X轴坐标</param>
+            <param name="xE">矩形区域右下角X轴坐标</param>
+            <param name="yB">矩形区域左上角Y轴坐标</param>
+            <param name="yE">矩形区域右下角Y轴坐标</param>
+            <param name="outxB">转换后的左上角X轴数据值</param>
+            <param name="outxE">转换后的右下角X轴数据值</param>
+            <param name="outyB">转换后的左上角Y轴数据值</param>
+            <param name="outyE">转换后的右下角Y轴数据值</param>
+        </member>
+        <member name="M:Yangyalin.YGraph._changeXYPointsToNum(System.Single,System.Single,System.Single@,System.Single@)">
+            <summary>
+            波形显示中一个点的坐标转换为数据值
+            </summary>
+            <param name="x">要转换的点的X轴坐标</param>
+            <param name="y">要转换的点的Y轴坐标</param>
+            <param name="outX">转换后的X轴坐标</param>
+            <param name="outY">转换后的Y轴坐标</param>
+        </member>
+        <member name="M:Yangyalin.YGraph.f_ClearAllPix">
+            <summary>
+            清空所有加载的波形数据并清空显示
+            </summary>
+        </member>
+        <member name="M:Yangyalin.YGraph.f_reXY">
+            <summary>
+            重新初始化X轴和Y轴坐标
+            </summary>
+        </member>
+        <member name="M:Yangyalin.YGraph.f_RefreshXY">
+            <summary>
+            刷新显示和坐标轴
+            </summary>
+        </member>
+        <member name="M:Yangyalin.YGraph.f_Refresh">
+            <summary>
+            更新显示
+            </summary>
+        </member>
+        <member name="M:Yangyalin.YGraph.f_LoadOnePix(System.Collections.Generic.List{System.Drawing.PointF}@,System.Drawing.Color,System.Single,System.Drawing.Drawing2D.LineJoin,System.Drawing.Drawing2D.LineCap,Yangyalin.YGraph.DrawStyle)">
+            <summary>
+            清空原有数据并加载一条波形数据
+            </summary>
+            <param name="listX">X轴</param>
+            <param name="listY">Y轴</param>
+            <param name="listColor">线条颜色</param>
+            <param name="listWidth">线条宽度</param>
+            <param name="listLineJoin">线条连接点</param>
+            <param name="listLineCap">线条起始线帽</param>
+            <param name="listDrawStyle">线条样式</param>
+        </member>
+        <member name="M:Yangyalin.YGraph.f_LoadOnePix(System.Collections.Generic.List{System.Drawing.PointF}@,System.Drawing.Color,System.Single)">
+            <summary>
+            清空原有数据并加载一条波形数据，显示样式为线条
+            </summary>
+            <param name="listX">X轴</param>
+            <param name="listY">Y轴</param>
+            <param name="listColor">线条颜色</param>
+            <param name="listWidth">线条宽度</param>
+        </member>
+        <member name="M:Yangyalin.YGraph.f_AddPix(System.Collections.Generic.List{System.Drawing.PointF}@,System.Drawing.Color,System.Single,System.Drawing.Drawing2D.LineJoin,System.Drawing.Drawing2D.LineCap,Yangyalin.YGraph.DrawStyle)">
+            <summary>
+            在原有波形上添加一条线
+            不可动态循环
+            </summary>
+            <param name="listX">X轴</param>
+            <param name="listY">Y轴</param>
+            <param name="listColor">线条颜色</param>
+            <param name="listWidth">线条宽度</param>
+            <param name="listLineJoin">线条连接点</param>
+            <param name="listLineCap">线条起始线帽</param>
+            <param name="listDrawStyle">线条样式</param>
+        </member>
+        <member name="M:Yangyalin.YGraph.f_AddPix(System.Collections.Generic.List{System.Drawing.PointF}@,System.Drawing.Color,System.Single)">
+            <summary>
+            在原有波形上添加一条线，显示样式为线条
+            不可动态循环
+            </summary>
+            <param name="listX">X轴</param>
+            <param name="listY">Y轴</param>
+            <param name="listColor">线条颜色</param>
+            <param name="listWidth">线条宽度</param>
+        </member>
+        <member name="F:Yangyalin.YGraph._ygraphtitle">
+            <summary>
+            波形显示控件标题
+            </summary>
+        </member>
+        <member name="F:Yangyalin.YGraph._ygraphtitlefont">
+            <summary>
+            波形显示控件标题字体
+            </summary>
+        </member>
+        <member name="F:Yangyalin.YGraph._ygraphtitleforecolor">
+            <summary>
+            控件标题颜色
+            </summary>
+        </member>
+        <member name="F:Yangyalin.YGraph._ygraphxAxistitle">
+            <summary>
+            X轴名称
+            </summary>
+        </member>
+        <member name="F:Yangyalin.YGraph._ygraphyAxistitle">
+            <summary>
+            Y轴名称
+            </summary>
+        </member>
+        <member name="F:Yangyalin.YGraph._isAutoModeXY">
+            <summary>
+            当前坐标是否自动调整以适合窗口大小
+            </summary>
+        </member>
+        <member name="F:Yangyalin.YGraph._isBigModeXY">
+            <summary>
+            当前是否处于放大查看模式
+            </summary>
+        </member>
+        <member name="F:Yangyalin.YGraph._isLinesShowXY">
+            <summary>
+            当前是否显示网格
+            </summary>
+        </member>
+        <member name="F:Yangyalin.YGraph._isShowBigSmallModeXY">
+            <summary>
+            当前是否允许放大缩小选取框显示
+            </summary>
+        </member>
+        <member name="F:Yangyalin.YGraph._fAccuracy">
+            <summary>
+            坐标精确度
+            </summary>
+        </member>
+        <member name="F:Yangyalin.YGraph._iAccuracy">
+            <summary>
+            坐标显示最多小数位数
+            </summary>
+        </member>
+        <member name="F:Yangyalin.YGraph._ygraphtitlepointfont">
+            <summary>
+            标题区域字体
+            </summary>
+        </member>
+        <member name="F:Yangyalin.YGraph._ygraphcoordinatefont">
+            <summary>
+            X,Y轴坐标字体
+            </summary>
+        </member>
+        <member name="F:Yangyalin.YGraph._ygraphcoordinatetitlefont">
+            <summary>
+            X,Y轴坐标标题字体
+            </summary>
+        </member>
+        <member name="F:Yangyalin.YGraph._ygraphtip">
+            <summary>
+            波形区域显示文本
+            </summary>
+        </member>
+        <member name="F:Yangyalin.YGraph._ygraphtoppoint">
+            <summary>
+            右上角提示点文本
+            </summary>
+        </member>
+        <member name="F:Yangyalin.YGraph._ygraphtoppointforecolor">
+            <summary>
+            右上角提示点字体颜色
+            </summary>
+        </member>
+        <member name="F:Yangyalin.YGraph._ygraphtipforecolor">
+            <summary>
+            图形区域字体颜色
+            </summary>
+        </member>
+        <member name="F:Yangyalin.YGraph._ygraphtipfont">
+            <summary>
+            图形区域字体
+            </summary>
+        </member>
+        <member name="F:Yangyalin.YGraph._ygraphbordertopbackcolor">
+            <summary>
+            背景色渐进起始颜色
+            </summary>
+        </member>
+        <member name="F:Yangyalin.YGraph._ygraphborderbuttombackcolor">
+            <summary>
+            背景色渐进终止颜色
+            </summary>
+        </member>
+        <member name="F:Yangyalin.YGraph._ygraphcoordinatelinecolor">
+            <summary>
+            X,Y轴轴坐标线颜色
+            </summary>
+        </member>
+        <member name="F:Yangyalin.YGraph._ygraphcoordinateforecolor">
+            <summary>
+            X,Y轴轴坐标值字体颜色
+            </summary>
+        </member>
+        <member name="F:Yangyalin.YGraph._ygraphcoordinatetitleforecolor">
+            <summary>
+            X,Y轴轴坐标标题字体颜色
+            </summary>
+        </member>
+        <member name="F:Yangyalin.YGraph._gridalpha">
+            <summary>
+            网格线透明度
+            </summary>
+        </member>
+        <member name="F:Yangyalin.YGraph._ygraphgridcolor">
+            <summary>
+            网格线颜色
+            </summary>
+        </member>
+        <member name="F:Yangyalin.YGraph._ygraphbackcolor">
+            <summary>
+            图形区背景色
+            </summary>
+        </member>
+        <member name="F:Yangyalin.YGraph._ygraphcmdbtnbackcolor">
+            <summary>
+            工具栏按钮背景颜色
+            </summary>
+        </member>
+        <member name="F:Yangyalin.YGraph._ygraphcmdbtncheckedforecolor">
+            <summary>
+            工具栏按钮前景选中颜色
+            </summary>
+        </member>
+        <member name="F:Yangyalin.YGraph._ygraphcmdbtnforecolor">
+            <summary>
+            工具栏按钮前景未选中颜色
+            </summary>
+        </member>
+        <member name="F:Yangyalin.YGraph._listPoint">
+            <summary>
+            要显示的数据集合的点集合的引用
+            若显示多条数据则依次添加点集合的引用
+            </summary>
+        </member>
+        <member name="F:Yangyalin.YGraph._listColor">
+            <summary>
+            要显示数据集合的线条颜色
+            </summary>
+        </member>
+        <member name="F:Yangyalin.YGraph._listWidth">
+            <summary>
+            要显示数据集合的线条宽度
+            </summary>
+        </member>
+        <member name="F:Yangyalin.YGraph._listLineJoin">
+            <summary>
+            要显示数据集合的连接点
+            </summary>
+        </member>
+        <member name="F:Yangyalin.YGraph._listLineCap">
+            <summary>
+            要显示数据集合的起始线帽
+            </summary>
+        </member>
+        <member name="F:Yangyalin.YGraph._listDrawStyle">
+            <summary>
+            要显示数据集合的样式
+            </summary>
+        </member>
+        <member name="P:Yangyalin.YGraph.YGraphTitle">
+            <summary>
+            波形显示控件标题
+            </summary>
+        </member>
+        <member name="P:Yangyalin.YGraph.YGraphTitleFont">
+            <summary>
+            波形显示控件标题字体
+            </summary>
+        </member>
+        <member name="P:Yangyalin.YGraph.YGraphTitleForeColor">
+            <summary>
+            控件标题颜色
+            </summary>
+        </member>
+        <member name="P:Yangyalin.YGraph.YGraphxAxisTitle">
+            <summary>
+            X轴标题
+            </summary>
+        </member>
+        <member name="P:Yangyalin.YGraph.YGraphyAxisTitle">
+            <summary>
+            Y轴标题
+            </summary>
+        </member>
+        <member name="P:Yangyalin.YGraph.YGraphxAxisBegin">
+            <summary>
+            初始X轴起始坐标
+            </summary>
+        </member>
+        <member name="P:Yangyalin.YGraph.YGraphxAxisEnd">
+            <summary>
+            初始X轴结束坐标
+            </summary>
+        </member>
+        <member name="P:Yangyalin.YGraph.YGraphyAxisBegin">
+            <summary>
+            初始Y轴起始坐标
+            </summary>
+        </member>
+        <member name="P:Yangyalin.YGraph.YGraphyAxisEnd">
+            <summary>
+            初始Y轴结束坐标
+            </summary>
+        </member>
+        <member name="P:Yangyalin.YGraph.YGraphTip">
+            <summary>
+            图形区域提示标题
+            </summary>
+        </member>
+        <member name="P:Yangyalin.YGraph.YGraphTipFont">
+            <summary>
+            图形区域字体
+            </summary>
+        </member>
+        <member name="P:Yangyalin.YGraph.YGraphTipForeColor">
+            <summary>
+            图形区域字体颜色
+            </summary>
+        </member>
+        <member name="P:Yangyalin.YGraph.YGraphBackColor">
+            <summary>
+            图形区背景色
+            </summary>
+        </member>
+        <member name="P:Yangyalin.YGraph.YGraphGridColor">
+            <summary>
+            网格线颜色
+            </summary>
+        </member>
+        <member name="P:Yangyalin.YGraph.YGraphGridAlpha">
+            <summary>
+            网格线透明度
+            </summary>
+        </member>
+        <member name="P:Yangyalin.YGraph.YGraphTopPointFont">
+            <summary>
+            标题区域字体
+            </summary>
+        </member>
+        <member name="P:Yangyalin.YGraph.YGraphTopPointForeColor">
+            <summary>
+            当前点面板的字体色
+            </summary>
+        </member>
+        <member name="P:Yangyalin.YGraph.YGraphBorderTopBackColor">
+            <summary>
+            背景色渐进起始颜色
+            </summary>
+        </member>
+        <member name="P:Yangyalin.YGraph.YGraphBorderButtomBackColor">
+            <summary>
+            背景色渐进终止颜色
+            </summary>
+        </member>
+        <member name="P:Yangyalin.YGraph.YGraphCoordinateLineColor">
+            <summary>
+            坐标延伸线颜色
+            </summary>
+        </member>
+        <member name="P:Yangyalin.YGraph.YGraphCoordinateFont">
+            <summary>
+            X,Y轴轴坐标字体
+            </summary>
+        </member>
+        <member name="P:Yangyalin.YGraph.YGraphCoordinateTitleFont">
+            <summary>
+            X,Y轴轴坐标标题字体
+            </summary>
+        </member>
+        <member name="P:Yangyalin.YGraph.YGraphCoordinateForeColor">
+            <summary>
+            X,Y轴轴坐标值字体颜色
+            </summary>
+        </member>
+        <member name="P:Yangyalin.YGraph.YGraphCoordinateTitleForeColor">
+            <summary>
+            X,Y轴轴坐标标题字体颜色
+            </summary>
+        </member>
+        <member name="P:Yangyalin.YGraph.YGraphCmdBtnBackColor">
+            <summary>
+            工具栏按钮背景颜色
+            </summary>
+        </member>
+        <member name="P:Yangyalin.YGraph.YGraphCmdBtnCheckedForeColor">
+            <summary>
+            工具栏按钮前景选中颜色
+            </summary>
+        </member>
+        <member name="P:Yangyalin.YGraph.YGraphCmdBtnForeColor">
+            <summary>
+            工具栏按钮前景未选中颜色
+            </summary>
+        </member>
+        <member name="P:Yangyalin.YGraph.m_BigXYBackColor">
+            <summary>
+            放大选取框背景颜色
+            </summary>
+        </member>
+        <member name="P:Yangyalin.YGraph.m_BigXYButtonBackColor">
+            <summary>
+            放大选取框按钮背景颜色
+            </summary>
+        </member>
+        <member name="P:Yangyalin.YGraph.m_BigXYButtonForeColor">
+            <summary>
+            放大选取框按钮文字颜色
+            </summary>
+        </member>
+        <member name="P:Yangyalin.YGraph.ShowToolBar">
+            <summary>
+            是否显示工具栏
+            </summary>
+        </member>
+        <member name="T:Yangyalin.YGraph.DrawStyle">
+            <summary>
+            画图样式
+            </summary>
+        </member>
+        <member name="F:Yangyalin.YGraph.DrawStyle.Line">
+            <summary>
+            线条
+            </summary>
+        </member>
+        <member name="F:Yangyalin.YGraph.DrawStyle.dot">
+            <summary>
+            点
+            </summary>
+        </member>
+        <member name="F:Yangyalin.YGraph.DrawStyle.bar">
+            <summary>
+            条形
+            </summary>
+        </member>
+    </members>
+</doc>
