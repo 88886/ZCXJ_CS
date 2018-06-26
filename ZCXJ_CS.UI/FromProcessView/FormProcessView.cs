@@ -43,7 +43,7 @@ namespace ZCXJ_CS.UI
             InitializeComponent();
 
             this.MouseWheel += FormProcessView_MouseWheel;
-            gsProcess.ClearAllGObject();
+            this.gsProcess.ClearAllGObject();
         }
 
         #endregion
@@ -58,6 +58,7 @@ namespace ZCXJ_CS.UI
             _timer.Interval = 1000;
             _timer.Elapsed += new ElapsedEventHandler(timer_Timer);
 
+            SFCInterface = new DM_SFCInterface();
             //启动网络连接监测线程
             if (IsNetConnected == true)
             {
@@ -65,12 +66,9 @@ namespace ZCXJ_CS.UI
             }
             else
             {
-                OnDisplayLog("Attention: PLC-[" + GlobalData.PlcIP + "]未连接……", false);
+                //OnDisplayLog("Attention: PLC-[" + GlobalData.PlcIP + "]未连接……", false);
             }
 
-            SFCInterface = new DM_SFCInterface();
-
-            //LoadFlowHistory("DFM18030300001V4.1.08V4.5.00000220180312");
         }
 
         #endregion
@@ -111,8 +109,10 @@ namespace ZCXJ_CS.UI
         {
             try
             {
-                plc = new Plc(CpuType.S71200, GlobalData.PlcIP, 0, 0);
+                if (GlobalData.MachineId != "OP130-02")
+                    return;
 
+                plc = new Plc(CpuType.S71200, GlobalData.PlcIP, 0, 0);
                 List<MonitorTag> lstM = new List<MonitorTag>();
                 lstM.Add(new MonitorTag("HandleType", GlobalData.MonitorTagAdd, 0));
                 plc.MonitorTagAddList = lstM;
@@ -121,7 +121,7 @@ namespace ZCXJ_CS.UI
                 if (plc.IsConnected && plc.IsAvailable)
                 {
                     log.Info("已连接plc[" + GlobalData.PlcIP + "]");
-                    OnDisplayLog("已连接plc[" + GlobalData.PlcIP + "]", false);
+                    OnDisplayLog("已连接plc[" + GlobalData.PlcIP + "]", true);
                 }
             }
             catch (Exception)
@@ -176,7 +176,7 @@ namespace ZCXJ_CS.UI
         object sync = new object();
         private DataTable dt;
 
-        private const string PFCheck = "制成检验";
+        private const string PFCheck = "制程检验";
         private const string VICheck = "外观检验";
         private void Plc_DataChange(object sender, DataChangeEventArgs e)
         {
@@ -192,27 +192,30 @@ namespace ZCXJ_CS.UI
                     switch (hv)
                     {
                         case 0:
-                            SetBtnEnableFalse();
-                            gsProcess.ClearAllGObject();
+                            SetBtnEnable(false);
+                            ClearGsProcess(true);
                             OnDisplayLog("", true);
+                            ResetWarningChart(0, true);
                             log.Info(hv + INITADDRESS);
                             break;
                         case 1:
                             log.Info(hv + SCANCOMPLETE);
                             //清洗完毕，告诉plc消息已收到
+                            ResetWarningChart(1, true);
                             SetPlcStatus(GlobalData.MonitorTagAdd, 2);
                             break;
                         case 2:
-                            log.Info(hv + READBARCODESUCCESS + "plcSN<" + plcSN + ">");
                             //扫码完成，MES读取条码 
                             byte[] bytes = plc.ReadBytes(DataType.DataBlock, int.Parse(GlobalData.MsgDB), 256, 256);
                             plcSN = Utility.ConvertToString(bytes);
+                            log.Info(hv + READBARCODESUCCESS + "plcSN<" + plcSN + ">");
                             OnDisplayLog("SN: " + plcSN, true);
                             try
                             {
                                 if (GlobalData.SimWrite != "true")
                                 {
                                     //调用MES函数向MES传递SN码，MES验证上工序是否成功，成功返回true，失败返回false 
+
                                     dt = SFCInterface.SFC_DM_CheckRouteOnlyCheck(plcSN, GlobalData.EquipmentNO, "", "");
                                     CheckStatus = dt.Rows[0][0].ToString().ToString();
                                     ReturnMsg = dt.Rows[0][1].ToString().ToString();
@@ -229,6 +232,7 @@ namespace ZCXJ_CS.UI
                                         SendMsgToPlc(int.Parse(GlobalData.MsgDB), int.Parse(GlobalData.MsgStart), hv + PROCESSCHECKFAIL + Msg);
                                         log.Info(hv + PROCESSCHECKFAIL + Msg);
                                         OnDisplayLog("Error: " + Msg, false);
+                                        DisplayResetBtn(true);
                                     }
                                 }
                             }
@@ -239,32 +243,41 @@ namespace ZCXJ_CS.UI
                             }
                             break;
                         case 3:
-                            SetBtnEnableTrue();
+                            SetBtnEnable(true);
+                            ResetWarningChart(2, true);
                             log.Info(hv + PROCESSCHECKSUCCESS);
                             LoadFlowHistory(plcSN);
                             break;
                         case 4:
-                            SetBtnEnableFalse();
+                            SetBtnEnable(false);
+                            ResetWarningChart(2, false);
                             log.Info(hv + PROCESSCHECKFAIL);
                             break;
                         case 5:
-                            lblHandle.Text = VICheck;
+                            SetBtnEnable(true);
+                            ResetWarningChart(3, true);
+                            SetlblText(VICheck);
                             log.Info(hv + PFCheckPASS);
                             break;
                         case 6:
+                            ResetWarningChart(3, false);
                             log.Info(hv + PFCheckFAIL);
                             break;
                         case 7:
-                            lblHandle.Text = PFCheck;
+                            ResetWarningChart(4, true);
+                            SetlblText(PFCheck);
                             log.Info(hv + VICheckPASS);
                             break;
                         case 8:
+                            ResetWarningChart(4, false);
                             log.Info(hv + VICheckFAIL);
                             break;
                         case 9:
+                            ResetWarningChart(5, true);
                             log.Info(hv + STATIONPASS);
                             break;
                         case 10:
+                            ResetWarningChart(5, false);
                             log.Info(hv + STATIONFAIL);
                             break;
                         default:
@@ -278,17 +291,78 @@ namespace ZCXJ_CS.UI
             }
         }
 
-        private void SetBtnEnableTrue()
+        /// <summary>
+        /// 设置检验类别名称
+        /// </summary>
+        /// <param name="text"></param>
+        private void SetlblText(string text)
         {
-            btnFail.Enabled = true;
-            btnPass.Enabled = true;
+            Invoke(new Action<string>((str) =>
+            {
+                lblHandle.Text = str;
+            }), text);
         }
 
-        private void SetBtnEnableFalse()
+        /// <summary>
+        /// 设置PASS/FAIL按钮只读性
+        /// </summary>
+        /// <param name="b"></param>
+        private void SetBtnEnable(bool b)
         {
-            btnFail.Enabled = false;
-            btnPass.Enabled = false;
+            Invoke(new Action<bool>((_b) =>
+            {
+                if (_b)
+                {
+                    btnFail.Enabled = true;
+                    btnPass.Enabled = true;
+                }
+                else
+                {
+                    btnFail.Enabled = false;
+                    btnPass.Enabled = false;
+                }
+
+            }), b);
         }
+
+        /// <summary>
+        /// 清空绘图区
+        /// </summary>
+        /// <param name="b"></param>
+        private void ClearGsProcess(bool b)
+        {
+            Invoke(new Action<bool>((_b) =>
+            {
+                if (_b)
+                {
+                    gsProcess.ClearAllGObject();
+                }
+
+            }), b);
+        }
+
+        /// <summary>
+        /// plc复位按钮
+        /// </summary>
+        /// <param name="b"></param>
+        private void DisplayResetBtn(bool b)
+        {
+            Invoke(new Action<bool>((_b) =>
+            {
+                if (_b)
+                {
+                    pnlbtnReset.Visible = true;
+                    pnlbtnProc.Visible = false;
+                }
+                else
+                {
+                    pnlbtnReset.Visible = false;
+                    pnlbtnProc.Visible = true;
+                }
+
+            }), b);
+        }
+
 
         /// <summary>
         /// set plc status
@@ -426,7 +500,7 @@ namespace ZCXJ_CS.UI
             }
             else
             {
-                SetBtnEnableFalse();
+                SetBtnEnable(false);
                 try
                 {
                     if (lblHandle.Text == PFCheck)
@@ -452,7 +526,6 @@ namespace ZCXJ_CS.UI
                     }
                     else
                     {
-                        //SetPlcStatus(GlobalData.MonitorTagAdd, 5);
                         SendMsgToPlc(int.Parse(GlobalData.MsgDB), int.Parse(GlobalData.MsgStart), "Fail " + STATIONFAIL + Msg);
                         log.Info("Fail" + STATIONFAIL + Msg);
                     }
@@ -466,7 +539,7 @@ namespace ZCXJ_CS.UI
 
         private void btnPass_Click(object sender, EventArgs e)
         {
-            SetBtnEnableFalse();
+            SetBtnEnable(false);
             try
             {
                 if (lblHandle.Text == PFCheck)
@@ -476,7 +549,6 @@ namespace ZCXJ_CS.UI
                 }
                 else if (lblHandle.Text == VICheck)
                 {
-
                     SetPlcStatus(GlobalData.MonitorTagAdd, 7);
                     log.Info("Pass" + VICheckPASS + Msg);
 
@@ -493,7 +565,6 @@ namespace ZCXJ_CS.UI
                     }
                     else
                     {
-                        //SetPlcStatus(GlobalData.MonitorTagAdd, 5);
                         SendMsgToPlc(int.Parse(GlobalData.MsgDB), int.Parse(GlobalData.MsgStart), "Fail " + STATIONFAIL + Msg);
                         log.Info("Fail" + STATIONFAIL + Msg);
                     }
@@ -511,6 +582,15 @@ namespace ZCXJ_CS.UI
 
         private void LoadFlowHistory(string sn)
         {
+            Invoke(new Action<string>((_sn) =>
+            {
+                _LoadFlowHistory(_sn);
+
+            }), sn);
+        }
+
+        private void _LoadFlowHistory(string sn)
+        {
             dt = CDBConnection.FlowHistory(sn);
             gsProcess.ClearAllGObject();
             if (dt != null)
@@ -518,10 +598,8 @@ namespace ZCXJ_CS.UI
                 foreach (DataRow dr in dt.Rows)
                 {
                     Image imgChild = (dr["StatusCode"].ToString() == "PASS") ? Resources.newPASS : Resources.newFAIL;
-                    gsProcess.AddGObject(dr["ID"].ToString(), imgChild, dr["EquipmentNO"].ToString() + "\n" + dr["ProcessNO"].ToString() + "_" + dr["ProcessDescription"].ToString());
-
+                    gsProcess.AddGObject(dr["ID"].ToString(), imgChild, dr["ProcessDescription"].ToString());
                 }
-
             }
             else
             {
@@ -564,8 +642,7 @@ namespace ZCXJ_CS.UI
         #endregion
 
         #region bar chart
-
-
+         
         private void InitChartComponent()
         {
             chartWarning = new VBarChart();
@@ -574,9 +651,11 @@ namespace ZCXJ_CS.UI
             #region right side
             chartWarning.Dock = DockStyle.Fill;
             chartWarning.AutoScroll = true;
+            chartWarning.VerticalScrollbar = true;
+            chartWarning.HorizontalScrollbar = true;
+            chartWarning.HorizontalScroll.Visible = true;
             //chartWarning.BarsGap = 4;//逐条间距
             chartWarning.Items.DrawingMode = DrawingModes.Glass;
-            chartWarning.AutoScroll = true;
             chartWarning.BarWidth = 30;
             chartWarning.SizingMode = BarSizingMode.Normal;
             chartWarning.Values.Visible = false;
@@ -586,7 +665,7 @@ namespace ZCXJ_CS.UI
             chartWarning.Background.GradientColor2 = Color.WhiteSmoke;
             chartWarning.ForeColor = Color.FromArgb(30, 57, 91);
             chartWarning.Label.Font = new Font("微软雅黑", 10, FontStyle.Bold);
-
+            chartWarning.Items.DrawingMode = DrawingModes.Glass;
             chartWarning.Shadow.ColorInner = Color.WhiteSmoke;
             chartWarning.Shadow.ColorOuter = Color.Gray;
 
@@ -594,15 +673,14 @@ namespace ZCXJ_CS.UI
             chartWarning.Clear();
 
             chartWarning.Add(100, "---1---初始状态", Color.Lime);
-            chartWarning.Add(100, "---2---条码读取完毕", Color.WhiteSmoke);
-            chartWarning.Add(100, "---3---上工序检验完毕", Color.WhiteSmoke);
-            chartWarning.Add(100, "---4---制成检验完毕", Color.WhiteSmoke);
-            chartWarning.Add(100, "---5---外观检验完毕", Color.WhiteSmoke);
-            chartWarning.Add(100, "---6---出站完毕", Color.WhiteSmoke);
+            chartWarning.Add(100, "---2---条码读取完毕", Color.Lime);
+            chartWarning.Add(100, "---3---上工序检验完毕", Color.Lime);
+            chartWarning.Add(100, "---4---制程检验完毕", Color.Lime);
+            chartWarning.Add(100, "---5---外观检验完毕", Color.Lime);
+            chartWarning.Add(100, "---6---出站完毕", Color.Lime);
 
             RedrawWarningChart();
         }
-
 
         private void ResetWarningChart(int flat, bool result)
         {
@@ -643,6 +721,32 @@ namespace ZCXJ_CS.UI
                 this.chartWarning.RedrawChart();
             }
         }
+
+        #endregion
+
+        #region PLC 复位
+
+        private void btnPlcReset_Click(object sender, EventArgs e)
+        {
+            if (plc != null)
+            {
+                if (plc.IsConnected && plc.IsAvailable)
+                {
+                    SetPlcStatus(GlobalData.MonitorTagAdd, 0);
+                    DisplayResetBtn(false);
+                }
+            }
+        }
+
+        #endregion
+
+        #region test
+
+        private void test_DoubleClick(object sender, EventArgs e)
+        {
+            LoadFlowHistory("DFMV011803014.5.004.1.08000022180320");
+        }
+
         #endregion
     }
 }

@@ -50,49 +50,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BarCodeHook.cs" />
-    <Compile Include="QualityManager.cs" />
-    <Compile Include="BomManager.cs" />
     <Compile Include="GlobalData.cs" />
-    <Compile Include="CallEventManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TeamHandoverManager.cs" />
-    <Compile Include="TurnOverCardManager.cs" />
-    <Compile Include="UserManager.cs" />
-    <Compile Include="WorkTicketManager.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ZCXJ_CS.Domain\ZCXJ_CS.Domain.csproj">
-      <Project>{71DE289D-6221-4E0F-A2D4-A7B2E1CB65B2}</Project>
-      <Name>ZCXJ_CS.Domain</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ZCXJ_CS.Infrastructure\ZCXJ_CS.Infrastructure.csproj">
-      <Project>{8494DB1E-87C4-43A5-9693-7BBADA21000C}</Project>
-      <Name>ZCXJ_CS.Infrastructure</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ZCXJ_CS.Repository\ZCXJ_CS.Repository.csproj">
-      <Project>{EC4EB6FE-8F2E-406A-B3C2-169F9CBD7F2F}</Project>
-      <Name>ZCXJ_CS.Repository</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ZCXJ_CS.Utilities\Common\Common.csproj">
       <Project>{26b929f0-e61c-4905-9f07-9fe59324986d}</Project>
       <Name>Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ZCXJ_CS.Utilities\ConfigHelper\ConfigHelper.csproj">
-      <Project>{E202C521-22E9-477E-B376-277935A43978}</Project>
-      <Name>ConfigHelper</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ZCXJ_CS.Utilities\JsonHelper\JsonHelper.csproj">
-      <Project>{DF903017-CA0F-430A-A9AA-4DDC4C355449}</Project>
-      <Name>JsonHelper</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ZCXJ_CS.Utilities\LogHelper\LogHelper.csproj">
-      <Project>{43DCF446-4179-46C4-9C5C-BFB5D87E4897}</Project>
-      <Name>LogHelper</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ZCXJ_CS.Utilities\SerialPortHelper\SerialPortHelper.csproj">
-      <Project>{7d41c245-c7a1-4074-b689-29846ae8989b}</Project>
-      <Name>SerialPortHelper</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -1,6 +1,7 @@
 ﻿using BarChart;
 using Bucklematerial;
 using DM_API;
+using DM_MES;
 using LabelManager2;
 using S7.Net;
 using System;
@@ -62,6 +63,7 @@ namespace ZCXJ_CS.UI
             }
 
             SFCInterface = new DM_SFCInterface();
+            //DataTable dt = SFCInterface.SFC_DM__ProvideBlockID_ByWO("XCVBNM");
 
         }
 
@@ -103,8 +105,10 @@ namespace ZCXJ_CS.UI
         {
             try
             {
-                plc = new Plc(CpuType.S71200, GlobalData.PlcIP, 0, 0);
+                if (GlobalData.MachineId != "OP010-01")
+                    return;
 
+                plc = new Plc(CpuType.S71200, GlobalData.PlcIP, 0, 0);
                 List<MonitorTag> lstM = new List<MonitorTag>();
                 lstM.Add(new MonitorTag("HandleType", GlobalData.MonitorTagAdd, 0));
                 plc.MonitorTagAddList = lstM;
@@ -188,20 +192,8 @@ namespace ZCXJ_CS.UI
                         case 1:
                             log.Info(hv + CLEARSUCCESS);
                             ResetWarningChart(1, true); // 清洗完毕
-                            ResetWarningChart(2, true); // 清洗完毕
-                            //测试代码，模拟扫描枪扫描条码至PLC---------------------------------------
-                            if (GlobalData.SimWrite == "true")
-                            {
-                                mesSN = "MonitorSN" + DateTime.Now.ToString("yyyyMMddHHmmsss");
-                                mesSN = "OBC_DFM.V014.1.084.5.00000018180327";
-                                SendMsgToPlc(int.Parse(GlobalData.MsgDB), 0, mesSN);
-                                ResetWarningChart(3, true); // 获取条码完毕
-                                ResetWarningChart(4, true); // 打印条码完毕
-                            }
-                            else
-                                mesSN = printSNBarcode();
-
-
+                            ResetWarningChart(2, true); // 读取信号完毕
+                            mesSN = printSNBarcode();
                             OnDisplayMesSn(mesSN, 1, 1);
                             //清洗完毕，告诉plc消息已收到
                             SetPlcStatus(GlobalData.MonitorTagAdd, 2);
@@ -230,39 +222,8 @@ namespace ZCXJ_CS.UI
                                 OnDisplayMesSn(plcSN, 1, 2);
                                 OnDisplayMesSn("", 1, 0);
                                 OnDisplayLog(DateTime.Now.ToString("yyyy/MM/dd HH:mm") + " 条码校验正确 ");
+                                SetPlcStatus(GlobalData.MonitorTagAdd, 5); //校验成功 
                                 SendMsgToPlc(int.Parse(GlobalData.MsgDB), 0, hv + SNCHECKSUCCESS);
-                                log.Info(hv + SNCHECKSUCCESS);
-                                ResetWarningChart(7, true);
-                                try
-                                {
-                                    if (GlobalData.SimWrite != "true")
-                                    {
-                                        DataTable dt = SFCInterface.SFC_DM_CheckRoute(plcSN, GlobalData.EquipmentNO, GlobalData.WorkOrder, "PASS");//FAIL
-                                        CheckStatus = dt.Rows[0][0].ToString().ToString();
-                                        ReturnMsg = dt.Rows[0][1].ToString().ToString();
-                                        Msg = CheckStatus + ":" + ReturnMsg;
-                                        if (CheckStatus == "1") //成功 
-                                        {
-                                            BuckleMaterialIn(hv, plcSN, "ASM", GlobalData.EquipmentNO + "-01");
-
-                                            SetPlcStatus(GlobalData.MonitorTagAdd, 5);
-                                            SendMsgToPlc(int.Parse(GlobalData.MsgDB), 0, hv + STATIONPASS + Msg);
-                                            log.Info(hv + STATIONPASS + Msg);
-
-
-                                        }
-                                        else
-                                        {
-                                            SetPlcStatus(GlobalData.MonitorTagAdd, 6);
-                                            SendMsgToPlc(int.Parse(GlobalData.MsgDB), 0, hv + STATIONFAIL + Msg);
-                                            log.Info(hv + STATIONFAIL + Msg);
-                                        }
-                                    }
-                                }
-                                catch (Exception ex)
-                                {
-                                    log.Info(hv + SNCHECKFAIL + ex.Message);
-                                }
                             }
                             else
                             {
@@ -275,21 +236,48 @@ namespace ZCXJ_CS.UI
                             }
                             break;
                         case 5:
+                            log.Info(hv + SNCHECKSUCCESS);
+                            ResetWarningChart(7, true);
+
+                            try
+                            {
+                                DataTable dt = SFCInterface.SFC_DM_CheckRoute(plcSN, GlobalData.EquipmentNO, GlobalData.WorkOrder, "PASS");//FAIL
+                                CheckStatus = dt.Rows[0][0].ToString().ToString();
+                                ReturnMsg = dt.Rows[0][1].ToString().ToString();
+                                Msg = CheckStatus + ":" + ReturnMsg;
+                                if (CheckStatus == "1") //成功 
+                                {
+
+                                    SetPlcStatus(GlobalData.MonitorTagAdd, 7);
+                                    SendMsgToPlc(int.Parse(GlobalData.MsgDB), 0, hv + STATIONPASS + Msg);
+                                    log.Info(hv + STATIONPASS + Msg);
+                                }
+                                else
+                                {
+                                    SetPlcStatus(GlobalData.MonitorTagAdd, 8);
+                                    SendMsgToPlc(int.Parse(GlobalData.MsgDB), 0, hv + STATIONFAIL + Msg);
+                                    log.Info(hv + STATIONFAIL + Msg);
+                                }
+                                // 扣料
+                                BuckleMaterialIn(hv, plcSN, "ASM", GlobalData.PalCode);
+                            }
+                            catch (Exception ex)
+                            {
+                                log.Info(hv + SNCHECKFAIL + ex.Message);
+                            }
+                            break;
+                        case 6:
+                            log.Info(hv + SNCHECKFAIL);
+                            ResetWarningChart(7, false);
+                            break;
+                        case 7:
                             log.Info(hv + STATIONPASS);
                             ResetWarningChart(8, true);
                             break;
-                        case 6:
+                        case 8:
                             log.Info(hv + STATIONFAIL);
                             ResetWarningChart(8, false);
                             break;
-                        //case 7:
-                        //    log.Info(hv + STATIONPASS);
-                        //    ResetWarningChart(8, true);
-                        //    break;
-                        //case 8:
-                        //    log.Info(hv + STATIONFAIL);
-                        //    ResetWarningChart(8, false);
-                        //    break;
                         default:
                             log.Info(hv + UNKNOWNVALEU);
                             break;
@@ -354,15 +342,16 @@ namespace ZCXJ_CS.UI
             #region right side
 
             chartWarning.Dock = DockStyle.Fill;
-            //chartWarning.AutoSize = true;
+            //chartWarning.AutoSize = true; 
             chartWarning.AutoScroll = true;
-            chartWarning.BarWidth = 35;
+
+            chartWarning.BarWidth = 32;
             //chartWarning.Height = 425;
             chartWarning.SizingMode = BarSizingMode.Normal;
             //chartWarning.SizingMode = BarSizingMode.AutoScale;
             chartWarning.Values.Visible = false;
             chartWarning.Scales.Section = 0;//刻度线
-            chartWarning.Background.PaintingMode = CBackgroundProperty.PaintingModes.RadialGradient;
+            chartWarning.Background.PaintingMode = CBackgroundProperty.PaintingModes.LinearGradient;
             chartWarning.Background.GradientColor1 = Color.Gainsboro;
             chartWarning.Background.GradientColor2 = Color.WhiteSmoke;
 
@@ -387,6 +376,19 @@ namespace ZCXJ_CS.UI
             RedrawWarningChart();
         }
 
+        /// <summary>
+        /// 1---初始状态
+        /// 2---壳体清洗完毕
+        /// 3---MES读取清洗信号完毕
+        /// 4---MES获取条码完毕
+        /// 5---在线条码打印完毕
+        /// 6---PLC扫描条码完毕
+        /// 7---MES读取条码完毕
+        /// 8---MES校验条码完毕
+        /// 9---出站完毕
+        /// </summary>
+        /// <param name="flat"></param>
+        /// <param name="result"></param>
         private void ResetWarningChart(int flat, bool result)
         {
             if (chartWarning != null)
@@ -440,10 +442,10 @@ namespace ZCXJ_CS.UI
             string snBarCode = "";
             try
             {
-                //string str = DM_API.SqlHelper.connectionString;
                 DataTable dt = SFCInterface.SFC_DM__ProvideBlockID_ByWO(GlobalData.WorkOrder);
                 snBarCode = dt.Rows[0][0].ToString();
                 snBarCode = snBarCode.Substring(4); // 1---DFM201982.93748
+                log.Info("2---Get work order success --- [" + GlobalData.WorkOrder + "] ");
                 log.Info("2---Get Qr code success --- [" + snBarCode + "] ");
 
                 ResetWarningChart(3, true); // 获取条码完毕 
@@ -526,7 +528,7 @@ namespace ZCXJ_CS.UI
                           switch (_flag)
                           {
                               case 0:
-                                  picBoxV.Load(ExePath + @"Res\Question.png");
+                                  picBoxV.Load(ExePath + @"Res\wait64.png");
                                   break;
                               case 1:
                                   picBoxV.Load(ExePath + @"Res\OK.png");
@@ -582,42 +584,6 @@ namespace ZCXJ_CS.UI
 
               }), msg, flag, type);
         }
-        
-        #region TestBarCodeScanner
 
-        BardCodeHooK BarCode = new BardCodeHooK();
-        private delegate void ShowInfoDelegate(BardCodeHooK.BarCodes barCode);
-        private void ShowInfo(BardCodeHooK.BarCodes barCode)
-        {
-            if (this.InvokeRequired)
-            {
-                this.BeginInvoke(new ShowInfoDelegate(ShowInfo), new object[] { barCode });
-            }
-            else
-            {
-
-
-            }
-        }
-
-
-        void BarCode_BarCodeEvent(BardCodeHooK.BarCodes barCode)
-        {
-            ShowInfo(barCode);
-        }
-        private void FrmMain_Load(object sender, EventArgs e)
-        {
-
-        }
-        private void FrmMain_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            BarCode.Stop();
-        }
-        private void textBox6_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        #endregion
     }
 }

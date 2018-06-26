@@ -186,7 +186,7 @@
             this.pictBarCode.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
             this.pictBarCode.Name = "pictBarCode";
             this.pictBarCode.Size = new System.Drawing.Size(401, 80);
-            this.pictBarCode.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictBarCode.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.pictBarCode.TabIndex = 22;
             this.pictBarCode.TabStop = false;
             // 

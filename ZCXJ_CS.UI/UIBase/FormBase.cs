@@ -10,13 +10,15 @@ using System.Reflection;
 
 namespace ZCXJ_CS.UI
 {
-    public delegate void LoadingDelegate(string frmName,string msg, bool IsShow);
+    public delegate void LoadingDelegate(string frmName, string msg, bool IsShow);
+   
     public partial class FormBase : Form
     {
         /// <summary>
         /// 加载框状态改变
         /// </summary>
         public static event LoadingDelegate OnLoadingChange;
+        
         /// <summary>
         /// 加载页面显示状态
         /// </summary>
@@ -54,4 +56,5 @@ namespace ZCXJ_CS.UI
             }
         }
     }
+     
 }

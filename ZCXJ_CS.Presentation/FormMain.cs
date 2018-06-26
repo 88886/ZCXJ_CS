@@ -5,8 +5,6 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using System.Threading;
-using ZCXJ_CS.Utilities;
-using ZCXJ_CS.Domain;
 using ZCXJ_CS.UI;
 using ZCXJ_CS.Applications;
 using System.Reflection;
@@ -14,11 +12,13 @@ using System.ComponentModel;
 using System.Net.NetworkInformation;
 using System.ComponentModel.Composition.Hosting;
 using System.ComponentModel.Composition;
-using System.Diagnostics;
+using MetroFramework.Forms;
+using MetroFramework;
+using ZCXJ_CS.Utilities;
 
 namespace ZCXJ_CS.Presentation
 {
-    public partial class FormMain : Form
+    public partial class FormMain : MetroForm
     {
         #region /// <summary> 字段声明
         /// <summary>
@@ -48,8 +48,7 @@ namespace ZCXJ_CS.Presentation
         private LogHelper log;
         //配置文件助手
         private ConfigHelper cfgHelper;
-        //SCADA数据对象
-        private ScadaData scada;
+
         #endregion
 
         /// <summary>
@@ -59,6 +58,8 @@ namespace ZCXJ_CS.Presentation
         {
             //初始化界面控件
             InitializeComponent();
+
+
             SetStyle(ControlStyles.UserPaint, true);
             SetStyle(ControlStyles.AllPaintingInWmPaint, true); // 禁止擦除背景.
             SetStyle(ControlStyles.OptimizedDoubleBuffer, true); // 在缓冲区重绘
@@ -79,32 +80,26 @@ namespace ZCXJ_CS.Presentation
                 tsb.ImageScaling = ToolStripItemImageScaling.None;
                 tsb.Image = dicUIPlugins[i].SelectPluginPic;
                 tsb.Text = dicUIPlugins[i].PluginText;
-                tsb.TextImageRelation = TextImageRelation.ImageAboveText; 
+                tsb.TextImageRelation = TextImageRelation.ImageAboveText;
                 tsb.Click += (_sender, _e) =>
                 {
                     if (currentindex != -1)
                     {
                         dicPicbox[currentindex].Image = dicUIPlugins[currentindex].PluginPic;
-                    } 
+                    }
                     ShowUIPlugin(dicUIPlugins[i].PluginForm, true);
                     currentindex = i;
                 };
                 tsMainTop.Items.Add(tsb);
-                //pnlMainTop.Controls.Add(dicPicbox[i]);
             }
-            //foreach (var i in keys)
-            //{
-            //    ToolStripButton tsb = new ToolStripButton();
-            //    pnlMainTop.Controls.Add(dicPicbox[i]);
-            //}
             if (!FormBase.IsLoaddingShow)
             {
                 ShowUIPlugin(dicUIPlugins[first].PluginForm, true);
                 logText.Text = string.Empty;
             }
             log.Info("程序就绪...");
+            log.Info("加载PalCode..." + GlobalData.PalCode);
         }
-         
 
         /// <summary>
         /// 异步初始化UI插件
@@ -126,19 +121,19 @@ namespace ZCXJ_CS.Presentation
             GlobalData.InitGlobalData();//初始化全局数据
             //设置界面元素
             logText.Text = "程序正在加载中,请稍后...";
-            lblMainTitle.Text = string.Format("IA-MES CS端系统 ({0} - {1})", GlobalData.Process, GlobalData.MachineId);
-            pnlTitle.BackgroundImage = Image.FromFile(ExePath + @"Res\MainTitle_BK.png");
-            pnlTitle.BackgroundImageLayout = ImageLayout.Stretch;
+            this.Text = string.Format("IA-MES CS端系统 ({0} - {1})", GlobalData.Process, GlobalData.MachineId);
+            //pnlTitle.BackgroundImage = Image.FromFile(ExePath + @"Res\MainTitle_BK.png");
+            //pnlTitle.BackgroundImageLayout = ImageLayout.Stretch;
 
             tsMainTop.Renderer = Antiufo.Controls.Windows7Renderer.Instance;
             tsMainTop.Items.Clear();
-            
+
             //pnlMainTop.BackgroundImage = Image.FromFile(ExePath + @"\Res\BarPanel.png");
             //pnlMainTop.BackgroundImageLayout = ImageLayout.Stretch;
-            staStripMain.BackgroundImage = Image.FromFile(ExePath + @"\Res\StripMain.png");
-            staStripMain.BackgroundImageLayout = ImageLayout.Stretch;
-            picLoginUser.Load(ExePath + @"Res\LoginUser.png");
-            picNetwork.Load(ExePath + @"Res\Network2.png");
+            //staStripMain.BackgroundImage = Image.FromFile(ExePath + @"\Res\StripMain.png");
+            //staStripMain.BackgroundImageLayout = ImageLayout.Stretch;
+            //picLoginUser.Load(ExePath + @"Res\LoginUser.png");
+            CenterImage.Image = Image.FromFile(ExePath + @"Res\Network2.png");
             staStripVersion.Text = "版本：" + Assembly.GetExecutingAssembly().GetName().Version.ToString();
             LogPictruce.Load(ExePath + @"Res\load.gif");
             FormBase.OnLoadingChange += OnFormLoadingChange;
@@ -159,10 +154,10 @@ namespace ZCXJ_CS.Presentation
             cfgHelper = GlobalData.CfgHelper;
             log = GlobalData.Log;
             log.OnDisplayLog += OnDisplayLog;
-            scada = GlobalData.Scada;
             dicPicbox = new Dictionary<int, PictureBox>();
             dicToolStripButton = new Dictionary<int, ToolStripButton>();
             dicUIPlugins = new Dictionary<int, IUIPlugin>();
+
             BackgroundWorker bgw = new BackgroundWorker();
             bgw.DoWork += AsyncLoadUIPluguns;
             bgw.RunWorkerCompleted += AsyncLoadUIPlugunsCompleted;
@@ -323,7 +318,7 @@ namespace ZCXJ_CS.Presentation
                     PingReply pingReply_Plc = ping.Send(GlobalData.PlcIP, 2000);
                     lock (lockObj)
                     {
-                        if (pingReply_Server.Status == IPStatus.Success && pingReply_Plc.Status == IPStatus.Success)
+                        if (pingReply_Plc.Status == IPStatus.Success && pingReply_Server.Status == IPStatus.Success)
                         {
                             IsConnectionOK = true;
                         }
@@ -366,7 +361,7 @@ namespace ZCXJ_CS.Presentation
             //更新时间
             staStripTime.Text = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
             //更新当前操作工
-            lblLoginUser.Text = GlobalData.CurUser.userName;
+            lblLoginUser.Text = "admin";
             //读SCADA数据
             if (timeCounter % 5 == 0)
             {
@@ -379,11 +374,11 @@ namespace ZCXJ_CS.Presentation
                 {
                     if (IsConnectionOK)
                     {
-                        picNetwork.Load(ExePath + @"Res\Network.png");
+                        CenterImage.Image = Image.FromFile(ExePath + @"Res\Network.png");
                     }
                     else
                     {
-                        picNetwork.Load(ExePath + @"Res\Network2.png");
+                        CenterImage.Image = Image.FromFile(ExePath + @"Res\Network2.png");
                     }
                     FormBase.IsNetConnected = IsConnectionOK;
                 }
@@ -457,9 +452,10 @@ namespace ZCXJ_CS.Presentation
         /// <param name="e"></param>
         private void FormMain_FormClosing(object sender, FormClosingEventArgs e)
         {
-            //DialogResult dr = MessageBox.Show("确定退出本系统吗？", "退出系统", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
-            DialogResult dr = DlgBox.Show("确定退出本系统吗？", "退出系统", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
-            if (dr == DialogResult.Cancel)
+            DialogResult dr = MetroMessageBox.Show(this, "确定退出本系统吗", "退出系统", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+            //DialogResult dr = DlgBox.Show("确定退出本系统吗？", "退出系统", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+            if (dr == DialogResult.No)
             {
                 e.Cancel = true;
                 return;
@@ -470,8 +466,6 @@ namespace ZCXJ_CS.Presentation
                 FormBase.OnLoadingChange -= OnFormLoadingChange;
             }
         }
-
-
 
         #endregion 退出处理
         private void picNetwork_Click(object sender, EventArgs e)

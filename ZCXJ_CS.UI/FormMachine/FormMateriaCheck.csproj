@@ -37,6 +37,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Dlls\BarChart.dll</HintPath>
     </Reference>
+    <Reference Include="DM.MES, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Dlls\DM.MES.dll</HintPath>
+    </Reference>
     <Reference Include="DM_API, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Dlls\DM_API.dll</HintPath>
@@ -74,10 +78,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\workspace\SourceCode\All PROJ\赵利娟\Intelligent_MES_MultiLangue\DM_MES\DM.MES.csproj">
-      <Project>{4e902535-95cf-432b-99e8-426eb95f13c1}</Project>
-      <Name>DM.MES</Name>
-    </ProjectReference>
     <ProjectReference Include="..\UIBase\UIBase.csproj">
       <Project>{695A088F-0592-4C1C-901D-69D8C6E6F6D9}</Project>
       <Name>UIBase</Name>

@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using ZCXJ_CS.Utilities;
-using ZCXJ_CS.Domain;
-using System.IO;
-using System.Reflection;
 
 
 namespace ZCXJ_CS.Applications
@@ -17,10 +11,6 @@ namespace ZCXJ_CS.Applications
         public static ConfigHelper CfgHelper = null;
         //日志助手对象
         public static LogHelper Log = null;
-        //全局工单管理对象
-        public static WorkTicketManager WtManager = null;
-        //全局SCADA数据对象
-        public static ScadaData Scada = null;
         //助理类对象
         public static Utils Utils = null;
         //当前工序类型
@@ -38,8 +28,6 @@ namespace ZCXJ_CS.Applications
         //扫描枪管理对象
         public static SerialPortHelper SpScanner;
          
-        // 当前操作工对象
-        public static User CurUser;
 
         //---------------PLC相关--------------------- 
         public static string PlcIP;
@@ -48,6 +36,7 @@ namespace ZCXJ_CS.Applications
         public static string MsgDB;
         public static string MsgStart;
         public static string EquipmentNO;
+        public static string PalCode;
         public static string WorkOrder; 
 
         /// <summary>
@@ -61,17 +50,7 @@ namespace ZCXJ_CS.Applications
             //日志对象
             Log = LogHelper.GetInstence();
             Log.StartLog(LogLevel.DEBUG);
-            //Scada数据管理对象---------------------------------
-            //Scada = new ScadaData();
-            //SpScanner = new SerialPortHelper(CfgHelper.GetKeyValue("SpScannerPortName"));
-            //SpScanner.Open();
-            //if (File.Exists(ScadaDataFile))
-            //{
-            //    Scada.Init(ScadaDataFile, ScadaDataTableName);
-            //}
-            //工单计划管理--------------------------------------
-            //WtManager = new WorkTicketManager();            
-			CurUser = new User();
+
             Utils = new Utils();
         }
 
@@ -79,15 +58,6 @@ namespace ZCXJ_CS.Applications
         {
             OnCurWorkTicketChanged = null;//清除事件
             SpScanner.Close();
-        }
-        /// <summary>
-        /// 触发当前运行工单切换事件
-        /// </summary>
-        public static void NotifyCurWorkTicketChanged(WorkTicket sender)
-        {
-            WtManager.CurWorkTicket = sender;
-            if (OnCurWorkTicketChanged != null)
-                OnCurWorkTicketChanged(sender, new EventArgs());
         }
 
         /// <summary>
@@ -110,6 +80,7 @@ namespace ZCXJ_CS.Applications
             MsgDB = CfgHelper.GetKeyValue("MsgDB");
             MsgStart = CfgHelper.GetKeyValue("MsgStart");
             EquipmentNO = CfgHelper.GetKeyValue("EquipmentNO");
+            PalCode = CfgHelper.GetKeyValue("PalCode");
             WorkOrder = CfgHelper.GetKeyValue("WorkOrder"); 
         }
     }

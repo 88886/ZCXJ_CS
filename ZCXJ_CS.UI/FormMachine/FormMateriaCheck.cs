@@ -1,19 +1,12 @@
 ﻿using BarChart;
 using SocketAsyncServer;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
-using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using ZCXJ_CS.UI;
-
-
-using BarChart;
 using TreeListView;
-using SocketAsyncServer;
 using System.Net;
 using DM_API;
 using System.Data.SqlClient;
@@ -55,7 +48,7 @@ namespace ZCXJ_CS.UI
         public FormMateriaCheck()
         {
             InitializeComponent();
-
+             
             InitChartComponent();
             InitInputComponent();
             InitSocketServer();

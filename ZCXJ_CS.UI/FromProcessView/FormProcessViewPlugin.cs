@@ -52,7 +52,7 @@ namespace ZCXJ_CS.UI
         {
             get
             {
-                return "制成工序";
+                return "制程工序";
             }
         }
 

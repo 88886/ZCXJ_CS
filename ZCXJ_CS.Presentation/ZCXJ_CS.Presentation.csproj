@@ -69,9 +69,25 @@
     <SignManifests>true</SignManifests>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DM.MES, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Dlls\DM.MES.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="MetroFramework, Version=1.3.0.0, Culture=neutral, PublicKeyToken=5f91a84759bf584a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Dlls\MetroFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="MetroFramework.Design, Version=1.3.0.0, Culture=neutral, PublicKeyToken=5f91a84759bf584a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Dlls\MetroFramework.Design.dll</HintPath>
+    </Reference>
+    <Reference Include="MetroFramework.Fonts, Version=1.3.0.0, Culture=neutral, PublicKeyToken=5f91a84759bf584a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Dlls\MetroFramework.Fonts.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
@@ -86,6 +102,9 @@
     <Reference Include="System.Xml" />
     <Reference Include="Windows7ToolStripRenderer">
       <HintPath>..\Dlls\Windows7ToolStripRenderer.dll</HintPath>
+    </Reference>
+    <Reference Include="YgControls">
+      <HintPath>..\ZCXJ_CS.UI\YgControls\obj\Debug\YgControls.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -128,41 +147,13 @@
       <Project>{695A088F-0592-4C1C-901D-69D8C6E6F6D9}</Project>
       <Name>UIBase</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ZCXJ_CS.Utilities\ConfigHelper\ConfigHelper.csproj">
-      <Project>{E202C521-22E9-477E-B376-277935A43978}</Project>
-      <Name>ConfigHelper</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ZCXJ_CS.Utilities\JsonHelper\JsonHelper.csproj">
-      <Project>{DF903017-CA0F-430A-A9AA-4DDC4C355449}</Project>
-      <Name>JsonHelper</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ZCXJ_CS.Utilities\LogHelper\LogHelper.csproj">
-      <Project>{43DCF446-4179-46C4-9C5C-BFB5D87E4897}</Project>
-      <Name>LogHelper</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ZCXJ_CS.Utilities\SerialPortHelper\SerialPortHelper.csproj">
-      <Project>{7D41C245-C7A1-4074-B689-29846AE8989B}</Project>
-      <Name>SerialPortHelper</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ZCXJ_CS.Utilities\SqliteHelper\SqliteHelper.csproj">
-      <Project>{89362B3E-116E-4E71-A098-657101D78E4A}</Project>
-      <Name>SqliteHelper</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ZCXJ_CS.Applications\ZCXJ_CS.Applications.csproj">
       <Project>{CCC4051E-9B2C-4DD1-92BF-D4FDB959F077}</Project>
       <Name>ZCXJ_CS.Applications</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ZCXJ_CS.Domain\ZCXJ_CS.Domain.csproj">
-      <Project>{71DE289D-6221-4E0F-A2D4-A7B2E1CB65B2}</Project>
-      <Name>ZCXJ_CS.Domain</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ZCXJ_CS.Infrastructure\ZCXJ_CS.Infrastructure.csproj">
-      <Project>{8494DB1E-87C4-43A5-9693-7BBADA21000C}</Project>
-      <Name>ZCXJ_CS.Infrastructure</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ZCXJ_CS.Repository\ZCXJ_CS.Repository.csproj">
-      <Project>{EC4EB6FE-8F2E-406A-B3C2-169F9CBD7F2F}</Project>
-      <Name>ZCXJ_CS.Repository</Name>
+    <ProjectReference Include="..\ZCXJ_CS.Utilities\Common\Common.csproj">
+      <Project>{26B929F0-E61C-4905-9F07-9FE59324986D}</Project>
+      <Name>Common</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

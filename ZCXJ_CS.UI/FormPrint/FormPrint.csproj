@@ -39,12 +39,28 @@
     <Reference Include="Bucklematerial">
       <HintPath>..\..\Dlls\Bucklematerial.dll</HintPath>
     </Reference>
+    <Reference Include="DM.MES, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Dlls\DM.MES.dll</HintPath>
+    </Reference>
     <Reference Include="DM_API">
       <HintPath>..\..\Dlls\DM_API.dll</HintPath>
     </Reference>
     <Reference Include="Interop.LabelManager2">
       <HintPath>..\..\Dlls\Interop.LabelManager2.dll</HintPath>
       <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="MetroFramework, Version=1.3.0.0, Culture=neutral, PublicKeyToken=5f91a84759bf584a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Dlls\MetroFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="MetroFramework.Design, Version=1.3.0.0, Culture=neutral, PublicKeyToken=5f91a84759bf584a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Dlls\MetroFramework.Design.dll</HintPath>
+    </Reference>
+    <Reference Include="MetroFramework.Fonts, Version=1.3.0.0, Culture=neutral, PublicKeyToken=5f91a84759bf584a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Dlls\MetroFramework.Fonts.dll</HintPath>
     </Reference>
     <Reference Include="S7.Net">
       <HintPath>..\..\Dlls\S7.Net.dll</HintPath>
@@ -59,6 +75,10 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="YgControls, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ZCXJ_CS.Presentation\bin\Plugins\UI\YgControls.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FormPrint.cs">
@@ -80,9 +100,9 @@
       <Project>{CCC4051E-9B2C-4DD1-92BF-D4FDB959F077}</Project>
       <Name>ZCXJ_CS.Applications</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\ZCXJ_CS.Utilities\LogHelper\LogHelper.csproj">
-      <Project>{43DCF446-4179-46C4-9C5C-BFB5D87E4897}</Project>
-      <Name>LogHelper</Name>
+    <ProjectReference Include="..\..\ZCXJ_CS.Utilities\Common\Common.csproj">
+      <Project>{26B929F0-E61C-4905-9F07-9FE59324986D}</Project>
+      <Name>Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\UIBase\UIBase.csproj">
       <Project>{695A088F-0592-4C1C-901D-69D8C6E6F6D9}</Project>
