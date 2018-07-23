@@ -200,7 +200,6 @@ namespace ZCXJ_CS.UI
                             break;
                         case 1:
                             log.Info(hv + SCANCOMPLETE);
-                            //清洗完毕，告诉plc消息已收到
                             ResetWarningChart(1, true);
                             SetPlcStatus(GlobalData.MonitorTagAdd, 2);
                             break;
@@ -673,11 +672,11 @@ namespace ZCXJ_CS.UI
             chartWarning.Clear();
 
             chartWarning.Add(100, "---1---初始状态", Color.Lime);
-            chartWarning.Add(100, "---2---条码读取完毕", Color.Lime);
-            chartWarning.Add(100, "---3---上工序检验完毕", Color.Lime);
-            chartWarning.Add(100, "---4---制程检验完毕", Color.Lime);
-            chartWarning.Add(100, "---5---外观检验完毕", Color.Lime);
-            chartWarning.Add(100, "---6---出站完毕", Color.Lime);
+            chartWarning.Add(100, "---2---条码读取完毕", Color.WhiteSmoke);
+            chartWarning.Add(100, "---3---上工序检验完毕", Color.WhiteSmoke);
+            chartWarning.Add(100, "---4---制程检验完毕", Color.WhiteSmoke);
+            chartWarning.Add(100, "---5---外观检验完毕", Color.WhiteSmoke);
+            chartWarning.Add(100, "---6---出站完毕", Color.WhiteSmoke);
 
             RedrawWarningChart();
         }

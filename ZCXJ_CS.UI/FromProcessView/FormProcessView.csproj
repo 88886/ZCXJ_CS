@@ -31,9 +31,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="BarChart, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Dlls\BarChart.dll</HintPath>
+    <Reference Include="BarChartEX">
+      <HintPath>..\..\Dlls\BarChartEX.dll</HintPath>
     </Reference>
     <Reference Include="DM.MES, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

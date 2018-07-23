@@ -259,7 +259,7 @@ namespace ZCXJ_CS.UI
                                     log.Info(hv + STATIONFAIL + Msg);
                                 }
                                 // 扣料
-                                BuckleMaterialIn(hv, plcSN, "ASM", GlobalData.PalCode);
+                                BuckleMaterialIn(hv, plcSN, GlobalData.EquipmentNO, GlobalData.PalCode,"");
                             }
                             catch (Exception ex)
                             {
@@ -313,13 +313,21 @@ namespace ZCXJ_CS.UI
             return bytebuff;
         }
 
-        private void BuckleMaterialIn(ushort _hv, string _plcSN, string _equipmentNO, string palCode)
+        /// <summary>
+        /// 扣料api
+        /// </summary>
+        /// <param name="_hv"></param>
+        /// <param name="_plcSN">产品sn</param>
+        /// <param name="_equipmentNO">设备id</param>
+        /// <param name="palCode">栈位号</param>
+        /// <param name="buckNO">扣料数量，空表示按系统标量扣</param>
+        private void BuckleMaterialIn(ushort _hv, string _plcSN, string _equipmentNO, string palCode,string buckNO)
         {
             try
             {
                 DM_Bucklematerial BucMat = new DM_Bucklematerial();
-                string retMsg = BucMat.BuckleMaterialIn(_plcSN, _equipmentNO, palCode);
-                log.Info(_hv + "---Buckle material success. success<" + retMsg + "---SN:" + _plcSN + "---EquipmentNO:" + _equipmentNO + "---PalCode:" + palCode + ">");
+                string retMsg = BucMat.BuckleMaterialIn(_plcSN, _equipmentNO, palCode, buckNO);
+                log.Info(_hv + "---Buckle material success. success<" + retMsg + "---SN:" + _plcSN + "---EquipmentNO:" + _equipmentNO + "---PalCode:" + palCode + "---BuckNO:" + buckNO + ">");
             }
             catch (Exception e)
             {

@@ -197,7 +197,7 @@ namespace ZCXJ_CS.UI
                 fDwnTime = downtime * 100 / total;
                 fRepaire = repairtime * 100 / total;
             }
-            catch (System.Exception ex)
+            catch (System.Exception)
             {
                 //MessageBox.Show("LoadEquipmentPerformance(): " + ex.Message);
                 return;
@@ -258,13 +258,11 @@ namespace ZCXJ_CS.UI
                          "AND B.IsEnable =1 AND B.ModuleID ='e42e041b-12a5-4b92-b8c1-257a2adb2e63'";
             DataTable dt = CDBConnection._GetGrdInfo(SQL);
             string EquipmentID = dt.Rows[0][0].ToString();
-
-
+            
             SqlParameter[] parameter = new SqlParameter[] {
                 new SqlParameter("@startTime", StartTime),
                 new SqlParameter("@endTime", EndTime),
                 new SqlParameter("@equipmentId ", EquipmentID)
-
             };
             DataSet ds = new DataSet();
             ds = SqlHelper.ExecuteDataSet(CDBConnection._GetDBConn(), CommandType.StoredProcedure, "status_min_proportion_byHour", parameter);
@@ -861,7 +859,7 @@ namespace ZCXJ_CS.UI
                 {
                     item.QTY = Int32.Parse(drQty[2].ToString());
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     item.QTY = 0;
                 }
